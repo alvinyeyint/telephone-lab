@@ -1,0 +1,27 @@
+{
+	"[markdown]": {
+		"editor.defaultFormatter": "mervin.markdown-formatter",
+		"editor.quickSuggestions": {
+			"other": true,
+			"comments": true,
+			"strings": true
+		}
+	},
+	"cSpell.words": [
+		"clsx",
+		"DTMF",
+		"errcode",
+		"errmsg",
+		"Iconoir",
+		"Linkus",
+		"mizu",
+		"openapi",
+		"partialize",
+		"peername",
+		"tailwindcss",
+		"webrtc",
+		"Xmark",
+		"Yeastar",
+		"zustand"
+	]
+}
