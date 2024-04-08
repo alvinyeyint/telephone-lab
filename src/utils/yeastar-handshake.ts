@@ -77,9 +77,9 @@ export class GetYeastarSignature {
     // GetToken
     const [tokenData, tokenError] = await this.getToken();
     // GetToken Error Handling
-    if (tokenError) throw new Error("GetTokenError:", { cause: tokenError });
+    if (tokenError) throw new Error("GetTokenError");
     if (tokenData === null)
-      throw new Error("GetTokenDataNull:", { cause: { tokenData } });
+      throw new Error("GetTokenDataNull");
 
     // Get Signature with data from GetToken
     const [signData, signError] = await this.getSignature(
@@ -87,9 +87,9 @@ export class GetYeastarSignature {
       this.username,
     );
     // GetSignature Error Handling
-    if (signError) throw new Error("GetSignature:", { cause: signError });
+    if (signError) throw new Error("GetSignature");
     if (signData === null)
-      throw new Error("GetSignatureDataNull:", { cause: { signData } });
+      throw new Error("GetSignatureDataNull");
 
     // Return Signature
     return signData;

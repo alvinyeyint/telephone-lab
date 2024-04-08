@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@src/utils/helper";
 import { useCallSessionStore } from "@src/utils/zustand";
 import { IconTransfer, IconPhoneX, IconPhoneOutgoing, IconPhoneCalling, IconPhone, IconArrowsShuffle, IconMicrophone, IconMicrophoneOff, IconPlayerPlay, IconPlayerPause, IconDialpad } from "@tabler/icons-react";
@@ -163,7 +164,7 @@ export function CallInProgress({
     };
     session.on("confirmed", handler);
     return () => {
-      session.removeListener("confirmed", handler);
+      (session as any).removeListener("confirmed", handler);
     };
   }, [session]);
 
@@ -175,7 +176,7 @@ export function CallInProgress({
     };
     session.on("accepted", handler);
     return () => {
-      session.removeListener("accepted", handler);
+      (session as any).removeListener("accepted", handler);
     };
   }, [session]);
 
@@ -186,7 +187,7 @@ export function CallInProgress({
     };
     session.on("failed", handler);
     return () => {
-      session.removeListener("failed", handler);
+      (session as any).removeListener("failed", handler);
     };
   }, [session]);
 
@@ -197,7 +198,7 @@ export function CallInProgress({
     };
     session.on("ended", handler);
     return () => {
-      session.removeListener("ended", handler);
+      (session as any).removeListener("ended", handler);
     };
   }, [session]);
 
@@ -213,6 +214,7 @@ export function CallInProgress({
   // }, [session]);
 
   // status changed.
+  
   useEffect(() => {
     const handler = (newStatus: CallStatus) => {
       console.log(`callId: ${newStatus.callId} status change.`);
@@ -220,7 +222,7 @@ export function CallInProgress({
     };
     session.on("statusChange", handler);
     return () => {
-      session.removeListener("statusChange", handler);
+      (session as any).removeListener("statusChange", handler);
     };
   }, [session]);
 
@@ -229,11 +231,13 @@ export function CallInProgress({
     const handler = (newStatus: CallStatus) => {
       console.log(`callId: ${newStatus.callId} status change.`);
       setTransferCallStatus(newStatus);
+      console.log(transferCallStatus)
     };
     newSession.on("statusChange", handler);
     return () => {
-      newSession.removeListener("statusChange", handler);
+      (newSession as any).removeListener("statusChange", handler);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newSession]);
 
   // show calling ui

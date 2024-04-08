@@ -57,6 +57,6 @@ export async function initLinkus(
 		.catch((err) => {
 			if (onError) onError(err);
 			alert("Linkus Sdk Error")
-			throw new Error("LinkusSdkError:", { cause: err });
+			throw new Error("LinkusSdkError");
 		});
 }

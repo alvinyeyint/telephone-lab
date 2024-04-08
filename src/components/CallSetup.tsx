@@ -2,13 +2,13 @@ import { initLinkus } from "@src/utils/linkus-sdk";
 import { GetYeastarSignature } from "@src/utils/yeastar-handshake";
 import { useCallSessionStore } from "@src/utils/zustand";
 import { useCallback, useState } from "react";
-import type { PBXOperator, PhoneOperator, Session } from "ys-webrtc-sdk-core";
+import type { PhoneOperator, Session } from "ys-webrtc-sdk-core";
 import { Button } from "./Base/Button";
 import { Card } from "./Base/Card";
 import { Input } from "./Base/Input";
 import { Title } from "./Base/Title";
 import { CallInProgress, DialPad, IncomingCall } from "./Telephone";
-import { IconLoader2, IconPlayerPlay, IconPlayerStop, IconRefresh } from '@tabler/icons-react'
+import { IconLoader2, IconPlayerPlay, IconRefresh } from '@tabler/icons-react'
 
 export function CallSetupUI() {
   const [username, setUsername] = useState("1000000");
@@ -22,14 +22,11 @@ export function CallSetupUI() {
 
   const { phone, setPhone, sessions, setSessions } = useCallSessionStore();
 
-  const [pbx, setPBX] = useState<PBXOperator>();
-  const [destroy, setDestroy] = useState<() => void>(() => () => {});
+  // const [pbx, setPBX] = useState<PBXOperator | null>(null);
 
   const [isConnecting, setIsConnecting] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [callId, setCallId] = useState<string>("");
   const [incomings, setIncoming] = useState<Session[]>([]);
-  const [cause, setCause] = useState<string>("");
 
   const getSignature = useCallback(() => {
     setIsGettingSignature(true);
@@ -48,40 +45,37 @@ export function CallSetupUI() {
           setSignature(data.sign);
           setSignatureError("");
         }
+        console.error(signatureError)
       })
       .catch((err) => {
         setSignatureError("Throw on handshake.");
         throw new Error(err);
       })
       .finally(() => setIsGettingSignature(false));
-  }, [AccessID, AccessKey, apiUrl, username]);
+  }, [AccessID, AccessKey, apiUrl, signatureError, username]);
 
   const setupEventListener = useCallback(
     (phone: PhoneOperator) => {
       const startSession = ({
         callId,
-        session,
       }: {
-        callId: any;
-        session: any;
+        callId: string;
       }) => {
-        setCallId(callId);
+        console.log(callId)
         setSessions(Array.from(phone.sessions.values()));
       };
 
       const deleteSession = ({
-        callId,
         cause,
       }: {
-        callId: any;
-        cause: any;
+        cause: string;
       }) => {
         // here can handle session deleted event.
-        setCause(cause);
+        console.log('deleted cause', cause);
 
         setSessions(Array.from(phone.sessions.values()));
       };
-      const incoming = ({ callId, session }: { callId: any; session: any }) => {
+      const incoming = ({ session }: { session: Session }) => {
         // This example disabled call waiting, only handle one call.
         // So here just handle one incoming call.
         setIncoming([session]);
@@ -111,16 +105,14 @@ export function CallSetupUI() {
           setupEventListener(phone);
         },
         afterStart(phone, pbx) {
+          console.log(pbx)
           setPhone(phone);
-          setPBX(pbx);
+          // setPBX(pbx);
         },
       }
     );
   }, [apiUrl, setPhone, setupEventListener, signature, username]);
 
-  const copySignatureToClipboard = useCallback(() => {
-    if (signature.length > 0) navigator.clipboard.writeText(signature);
-  }, [signature]);
 
   return (
     <div>

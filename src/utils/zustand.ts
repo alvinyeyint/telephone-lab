@@ -1,14 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PhoneOperator, Session } from "ys-webrtc-sdk-core";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-// ////////////////////////////////////////
-// example usage
-// ////////////////////////////////////////
-export function useExampleUsageStore() {
-	const count = useCounterStore((s) => s.count);
-	const incCount = useCounterStore((s) => s.incCount);
-}
 
 // ////////////////////////////////////////
 // Counter Store
@@ -55,7 +48,7 @@ interface ApiStore {
 	data: object | null;
 	fetch: (payload: any) => Promise<void>;
 }
-export const useApiStore = create<ApiStore>((set, get) => {
+export const useApiStore = create<ApiStore>(() => {
 	return {
 		data: null,
 		fetch: async (payload) => {
@@ -75,7 +68,7 @@ interface CallSessionStore {
 	sessions: Session[];
 	setSessions: (sessions: Session[]) => void;
 }
-export const useCallSessionStore = create<CallSessionStore>((set, get) => {
+export const useCallSessionStore = create<CallSessionStore>((set) => {
 	return {
 		phone: null,
 		setPhone: (phone) => set({ phone }),
